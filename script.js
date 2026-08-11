@@ -9,25 +9,51 @@ window.addEventListener('load', () => {
     }, 2000);
 });
 
-// --- 2. MULTILINGUAL DICTIONARY (i18n) ---
+// --- 2. CUSTOM CURSOR LOGIC ---
+const cursorDot = document.querySelector('.cursor-dot');
+const cursorOutline = document.querySelector('.cursor-outline');
+
+if(cursorDot && cursorOutline) {
+    window.addEventListener('mousemove', (e) => {
+        cursorDot.style.left = e.clientX + 'px';
+        cursorDot.style.top = e.clientY + 'px';
+        cursorOutline.animate({
+            left: e.clientX + 'px',
+            top: e.clientY + 'px'
+        }, { duration: 500, fill: 'forwards' });
+    });
+
+    document.body.addEventListener('mouseover', (e) => {
+        if (e.target.closest('button, a, select, input, .size-btn, .logo, .menu-items p, .size-guide-link, .icon-btn')) {
+            document.body.classList.add('cursor-hover');
+        } else {
+            document.body.classList.remove('cursor-hover');
+        }
+    });
+}
+
+// --- 3. MULTILINGUAL DICTIONARY (NO EMOJIS) ---
 const translations = {
     en: {
-        entering: "ENTERING RYZE...", hero_title: "YOU ARE  IN CONTROL", explore: "EXPLORE COLLECTION ->",
+        entering: "ENTERING RYZE...", marquee_text: "WORLDWIDE MINDSET - FREE DELIVERY - SECURE PAYMENT - ",
+        hero_title: "YOU ARE IN CONTROL", explore: "EXPLORE COLLECTION ->", manifesto_title: "REDEFINE GRAVITY", manifesto_text: "Streetwear designed for the unknown.",
         collections: "COLLECTIONS", winter: "WINTER", autumn: "AUTUMN", summer: "SUMMER", tops: "- Tops", bottoms: "- Bottoms",
         cargo: "CARGO (BAG)", total: "TOTAL:", checkout: "TRANSMIT TO WHATSAPP", empty_cart: "Your cargo is empty.",
-        latest_drops: "LATEST DROPS", archives_btn: "EXPLORE THE ARCHIVES (PAST COLLECTIONS) ", add_bag: "ADD TO BAG", sold_out: "SOLD OUT"
+        latest_drops: "LATEST DROPS", archives_btn: "EXPLORE THE ARCHIVES (PAST COLLECTIONS)", add_bag: "ADD TO BAG", sold_out: "SOLD OUT", size_guide: "Size Guide", size_guide_title: "SIZE GUIDE"
     },
     fr: {
-        entering: "CONNEXION À RYZE...", hero_title: "VOUS N'ÊTES  AUX COMMANDES", explore: "EXPLORER LA COLLECTION ->",
-        collections: "COLLECTIONS", winter: "HIVER", autumn: "AUTOMNE", summer: "ÉTÉ", tops: "- Hauts", bottoms: "- Bas",
+        entering: "CONNEXION A RYZE...", marquee_text: "ETAT D'ESPRIT MONDIAL - LIVRAISON 58 WILAYAS - PAIEMENT A LA LIVRAISON - ",
+        hero_title: "VOUS ETES AUX COMMANDES", explore: "EXPLORER LA COLLECTION ->", manifesto_title: "REDEFINIR LA GRAVITE", manifesto_text: "Le Streetwear concu pour l'inconnu.",
+        collections: "COLLECTIONS", winter: "HIVER", autumn: "AUTOMNE", summer: "ETE", tops: "- Hauts", bottoms: "- Bas",
         cargo: "CARGO (PANIER)", total: "TOTAL:", checkout: "COMMANDER VIA WHATSAPP", empty_cart: "Votre cargo est vide.",
-        latest_drops: "DERNIÈRES SORTIES", archives_btn: "EXPLORER LES ARCHIVES (ANCIENNES COLLECTIONS) ", add_bag: "AJOUTER", sold_out: "ÉPUISÉ"
+        latest_drops: "DERNIERES SORTIES", archives_btn: "EXPLORER LES ARCHIVES (ANCIENNES COLLECTIONS)", add_bag: "AJOUTER", sold_out: "EPUISE", size_guide: "Guide des Tailles", size_guide_title: "GUIDE DES TAILLES"
     },
     ar: {
-        entering: "دخول عالم رايز...", hero_title: "أنت  في موقع السيطرة", explore: "استكشف التشكيلة <-",
+        entering: "دخول عالم رايز...", marquee_text: "تفكير عالمي - توصيل 58 ولاية - الدفع عند الاستلام - ",
+        hero_title: "أنت في موقع السيطرة", explore: "استكشف التشكيلة <-", manifesto_title: "إعادة تعريف الجاذبية", manifesto_text: "ملابس شارع مصممة للمجهول.",
         collections: "التشكيلات", winter: "شتاء", autumn: "خريف", summer: "صيف", tops: "- ملابس علوية", bottoms: "- ملابس سفلية",
         cargo: "الحقيبة", total: "المجموع:", checkout: "أرسل الطلب عبر واتساب", empty_cart: "حقيبتك فارغة.",
-        latest_drops: "أحدث الإصدارات", archives_btn: "استكشف الأرشيف (التشكيلات السابقة) ", add_bag: "أضف للحقيبة", sold_out: "نفدت الكمية"
+        latest_drops: "أحدث الإصدارات", archives_btn: "استكشف الأرشيف (التشكيلات السابقة)", add_bag: "أضف للحقيبة", sold_out: "نفدت الكمية", size_guide: "دليل المقاسات", size_guide_title: "دليل المقاسات"
     }
 };
 
@@ -35,33 +61,31 @@ let currentLang = 'en';
 
 function changeLanguage(lang) {
     currentLang = lang;
-    document.getElementById('html-doc').dir = lang === 'ar' ? 'rtl' : 'ltr'; // Magic RTL flip for Arabic
+    document.getElementById('html-doc').dir = lang === 'ar' ? 'rtl' : 'ltr'; 
     
-    // Update all static text
     document.querySelectorAll('[data-i18n]').forEach(el => {
         let key = el.getAttribute('data-i18n');
         if(translations[lang][key]) el.innerText = translations[lang][key];
     });
     
-    // Re-render products to update "Add to Bag" / "Sold Out" text
     if (currentFilter) filterProducts(currentFilter.season, currentFilter.type);
     else showLatestDrops();
     
     updateCartUI();
 }
 
-// --- 3. DATABASE (Added Stock, Season, Type) ---
+// --- 4. DATABASE ---
 const produits = [
     {
         id: 1, name: "ORBIT TEE", price: 3500, season: "summer", type: "top", stock: 15, isLatest: true,
         imgFront: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600", imgBack: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600"
     },
     {
-        id: 2, name: "VOID HOODIE", price: 6500, season: "winter", type: "top", stock: 0, isLatest: true, // STOCK = 0 (SOLD OUT)
+        id: 2, name: "VOID HOODIE", price: 6500, season: "winter", type: "top", stock: 0, isLatest: true, 
         imgFront: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600", imgBack: "https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600"
     },
     {
-        id: 3, name: "NEBULA JACKET", price: 9500, season: "autumn", type: "top", stock: 5, isLatest: false, // NOT LATEST
+        id: 3, name: "NEBULA JACKET", price: 9500, season: "autumn", type: "top", stock: 5, isLatest: false,
         imgFront: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600", imgBack: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600"
     },
     {
@@ -70,7 +94,7 @@ const produits = [
     }
 ];
 
-// --- 4. RENDER & FILTER LOGIC ---
+// --- 5. RENDER & FILTER ---
 const grid = document.getElementById('product-grid');
 let currentFilter = null;
 
@@ -79,7 +103,7 @@ function renderProducts(liste, titleKey) {
     document.getElementById('section-title').innerText = translations[currentLang][titleKey] || titleKey;
 
     if(liste.length === 0) {
-        grid.innerHTML = `<p style='text-align:center; width:100%; color: #888;'>No items found in this sector.</p>`;
+        grid.innerHTML = `<p style='text-align:center; width:100%; color: #888;'>No items found.</p>`;
         return;
     }
 
@@ -100,6 +124,9 @@ function renderProducts(liste, titleKey) {
                     <div class="prod-name">${produit.name}</div>
                     <div class="prod-price">${produit.price} DA</div>
                 </div>
+                <div class="size-header">
+                    <span class="size-guide-link" onclick="openSizeGuide()">${translations[currentLang].size_guide}</span>
+                </div>
                 <div class="sizes">
                     <button class="size-btn active" onclick="selectSize(this)">S</button>
                     <button class="size-btn" onclick="selectSize(this)">M</button>
@@ -115,6 +142,7 @@ function renderProducts(liste, titleKey) {
 function showLatestDrops() {
     currentFilter = null;
     document.getElementById('main-header').style.display = 'flex';
+    document.getElementById('manifesto-section').style.display = 'flex';
     document.getElementById('archives-hint').style.display = 'block';
     let latest = produits.filter(p => p.isLatest);
     renderProducts(latest, "latest_drops");
@@ -123,7 +151,8 @@ function showLatestDrops() {
 
 function filterProducts(season, type) {
     currentFilter = { season, type };
-    document.getElementById('main-header').style.display = 'none'; // Hide big header when exploring specific category
+    document.getElementById('main-header').style.display = 'none'; 
+    document.getElementById('manifesto-section').style.display = 'none';
     document.getElementById('archives-hint').style.display = 'none';
     
     let filtered = produits.filter(p => p.season === season && p.type === type);
@@ -131,17 +160,15 @@ function filterProducts(season, type) {
     closeNavMenu();
 }
 
-// Initial Load
 showLatestDrops();
 
-// Search logic
 document.getElementById('search-bar').addEventListener('input', (e) => {
     let mot = e.target.value.toLowerCase();
     let filtrés = produits.filter(p => p.name.toLowerCase().includes(mot));
     renderProducts(filtrés, "SEARCH RESULTS");
 });
 
-// --- 5. SIDEBARS (MENU & CART) ---
+// --- 6. SIDEBARS & MODALS ---
 function toggleNavMenu() {
     document.getElementById('nav-sidebar').classList.toggle('active');
     document.getElementById('nav-overlay').classList.toggle('active');
@@ -157,7 +184,16 @@ function toggleCart() {
     updateCartUI();
 }
 
-// --- 6. CART MANAGEMENT ---
+function openSizeGuide() {
+    document.getElementById('size-modal').classList.add('active');
+}
+function closeSizeGuide(event, forceClose = false) {
+    if (forceClose || event.target.id === 'size-modal') {
+        document.getElementById('size-modal').classList.remove('active');
+    }
+}
+
+// --- 7. CART MANAGEMENT ---
 let cart = [];
 
 function selectSize(btn) {
@@ -168,7 +204,7 @@ function selectSize(btn) {
 
 function addToCart(productId, btnElement) {
     let product = produits.find(p => p.id === productId);
-    let sizeBtn = btnElement.parentElement.querySelector('.size-btn.active');
+    let sizeBtn = btnElement.parentElement.parentElement.querySelector('.size-btn.active');
     let size = sizeBtn ? sizeBtn.innerText : 'M';
 
     let existingItem = cart.find(item => item.id === productId && item.size === size);
@@ -180,15 +216,13 @@ function addToCart(productId, btnElement) {
     }
 
     updateCartUI();
-    toggleCart(); // Auto-open cart to show they added it
+    toggleCart(); 
 }
 
 function changeQty(index, amount) {
     let item = cart[index];
     let originalProduct = produits.find(p => p.id === item.id);
-    
-    if (amount === 1 && item.qty >= originalProduct.stock) return; // Can't add more than stock
-    
+    if (amount === 1 && item.qty >= originalProduct.stock) return; 
     item.qty += amount;
     if (item.qty <= 0) cart.splice(index, 1);
     updateCartUI();
@@ -232,9 +266,9 @@ function updateCartUI() {
 
 function checkout() {
     if (cart.length === 0) return;
-    let message = "🪐 *RYZE ORDER* 🪐%0A%0A";
+    let message = "NEW RYZE ORDER%0A%0A";
     let total = 0;
-    cart.forEach(i => { message += `▪️ ${i.qty}x ${i.name} (Size: ${i.size}) - ${i.price * i.qty} DA%0A`; total += i.price * i.qty; });
-    message += `%0A*TOTAL : ${total} DA*%0A%0AInfos:%0ANom : %0AWilaya : %0ATel : `;
+    cart.forEach(i => { message += `- ${i.qty}x ${i.name} (Size: ${i.size}) : ${i.price * i.qty} DA%0A`; total += i.price * i.qty; });
+    message += `%0ATOTAL : ${total} DA%0A%0AInfos:%0AName : %0AWilaya : %0ATel : `;
     window.open(`https://wa.me/213000000000?text=${message}`, '_blank');
 }

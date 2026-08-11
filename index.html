@@ -12,7 +12,11 @@
 </head>
 <body>
 
-    <!-- 🌌 SOLAR SYSTEM INTRO -->
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- SOLAR SYSTEM INTRO -->
     <div id="space-loader">
         <div class="solar-system">
             <div class="sun"></div>
@@ -21,7 +25,15 @@
         <h1 class="loader-text" data-i18n="entering">ENTERING RYZE...</h1>
     </div>
 
-    <!-- 🛸 TOP NAVBAR -->
+    <!-- MARQUEE / TICKER TAPE -->
+    <div class="marquee">
+        <div class="marquee-track">
+            <span data-i18n="marquee_text">WORLDWIDE MINDSET - LIVRAISON 58 WILAYAS - PAIEMENT A LA LIVRAISON - </span>
+            <span data-i18n="marquee_text">WORLDWIDE MINDSET - LIVRAISON 58 WILAYAS - PAIEMENT A LA LIVRAISON - </span>
+        </div>
+    </div>
+
+    <!-- TOP NAVBAR -->
     <nav>
         <div class="nav-left">
             <button class="icon-btn" onclick="toggleNavMenu()"><i class="ph ph-list"></i></button>
@@ -29,7 +41,6 @@
         </div>
         
         <div class="nav-right">
-            <!-- Language Switcher -->
             <select id="lang-switcher" onchange="changeLanguage(this.value)">
                 <option value="en">EN</option>
                 <option value="fr">FR</option>
@@ -45,7 +56,7 @@
         </div>
     </nav>
 
-    <!-- 📁 LEFT NAVIGATION SIDEBAR (COLLECTIONS) -->
+    <!-- LEFT NAVIGATION SIDEBAR -->
     <div class="overlay" id="nav-overlay" onclick="toggleNavMenu()"></div>
     <div class="nav-sidebar" id="nav-sidebar">
         <div class="sidebar-header">
@@ -67,7 +78,7 @@
         </div>
     </div>
 
-    <!-- 🛒 RIGHT CART SIDEBAR -->
+    <!-- RIGHT CART SIDEBAR -->
     <div class="overlay" id="cart-overlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="sidebar-header">
@@ -81,22 +92,73 @@
         </div>
     </div>
 
+    <!-- HERO SECTION -->
     <header id="main-header">
         <div class="hero-subtitle" data-aos="fade-up">SUPPLY CO. EST. 2026</div>
         <h1 class="hero-title" data-aos="zoom-in" data-aos-delay="200" data-i18n="hero_title">YOU ARE IN CONTROL</h1>
         <div class="hero-subtitle" data-aos="fade-up" data-aos-delay="400" data-i18n="explore">EXPLORE COLLECTION -></div>
     </header>
 
+    <!-- MANIFESTO / LOOKBOOK SECTION -->
+    <section class="manifesto" id="manifesto-section">
+        <div class="manifesto-overlay"></div>
+        <div class="manifesto-content" data-aos="fade-up">
+            <h2 data-i18n="manifesto_title">REDEFINE GRAVITY</h2>
+            <p data-i18n="manifesto_text">Streetwear designed for the unknown.</p>
+        </div>
+    </section>
+
+    <!-- PRODUCTS GRID -->
     <h2 class="section-title" id="section-title" data-aos="fade-in" data-i18n="latest_drops">LATEST DROPS</h2>
-    
     <div class="grid" id="product-grid"></div>
 
-    <!-- HINT FOR ARCHIVES -->
+    <!-- ARCHIVES HINT -->
     <div class="archives-hint" id="archives-hint">
-        <button class="archive-btn" onclick="toggleNavMenu()" data-i18n="archives_btn">EXPLORE THE ARCHIVES (PAST COLLECTIONS) 🌌</button>
+        <button class="archive-btn" onclick="toggleNavMenu()" data-i18n="archives_btn">EXPLORE THE ARCHIVES (PAST COLLECTIONS)</button>
+    </div>
+
+    <!-- SIZE GUIDE MODAL -->
+    <div class="size-modal-overlay" id="size-modal" onclick="closeSizeGuide(event)">
+        <div class="size-modal-content">
+            <button class="icon-btn close-size" onclick="closeSizeGuide(event, true)"><i class="ph ph-x"></i></button>
+            <h2 data-i18n="size_guide_title">SIZE GUIDE</h2>
+            <table class="size-table">
+                <tr><th>SIZE</th><th>LENGTH (cm)</th><th>CHEST (cm)</th></tr>
+                <tr><td>S</td><td>70</td><td>52</td></tr>
+                <tr><td>M</td><td>72</td><td>55</td></tr>
+                <tr><td>L</td><td>74</td><td>58</td></tr>
+                <tr><td>XL</td><td>76</td><td>61</td></tr>
+            </table>
+        </div>
     </div>
 
     <br><br><br><br>
+
+    <!-- FOOTER -->
+    <footer class="ryze-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>RYZE</h2>
+                <p>Space Streetwear.<br>You are in control.</p>
+            </div>
+            <div class="footer-links">
+                <h3>INFO</h3>
+                <p><i class="ph ph-truck"></i> Livraison 58 Wilayas (Yalidine)</p>
+                <p><i class="ph ph-money"></i> Paiement a la livraison (Cash on Delivery)</p>
+                <p><i class="ph ph-arrow-counter-clockwise"></i> Retours sous 3 jours</p>
+            </div>
+            <div class="footer-socials">
+                <h3>TRANSMISSIONS</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                    <a href="#"><i class="ph ph-tiktok-logo"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 RYZE SUPPLY CO. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="script.js"></script>
