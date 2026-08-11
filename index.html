@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" id="html-doc">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RYZE | Space Streetwear</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 🌌 SOLAR SYSTEM INTRO -->
+    <div id="space-loader">
+        <div class="solar-system">
+            <div class="sun"></div>
+            <div class="orbit"><div class="planet"></div></div>
+        </div>
+        <h1 class="loader-text" data-i18n="entering">ENTERING RYZE...</h1>
+    </div>
+
+    <!-- 🛸 TOP NAVBAR -->
+    <nav>
+        <div class="nav-left">
+            <button class="icon-btn" onclick="toggleNavMenu()"><i class="ph ph-list"></i></button>
+            <div class="logo" onclick="showLatestDrops()">RYZE</div>
+        </div>
+        
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <select id="lang-switcher" onchange="changeLanguage(this.value)">
+                <option value="en">EN</option>
+                <option value="fr">FR</option>
+                <option value="ar">عربي</option>
+            </select>
+            <div class="search-container">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="search-bar" placeholder="Search...">
+            </div>
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="ph ph-shopping-bag"></i> <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 📁 LEFT NAVIGATION SIDEBAR (COLLECTIONS) -->
+    <div class="overlay" id="nav-overlay" onclick="toggleNavMenu()"></div>
+    <div class="nav-sidebar" id="nav-sidebar">
+        <div class="sidebar-header">
+            <h2 data-i18n="collections">COLLECTIONS</h2>
+            <button class="icon-btn" onclick="toggleNavMenu()"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="menu-items">
+            <h3 data-i18n="winter">WINTER</h3>
+            <p onclick="filterProducts('winter', 'top')" data-i18n="tops">- Tops</p>
+            <p onclick="filterProducts('winter', 'bottom')" data-i18n="bottoms">- Bottoms</p>
+
+            <h3 data-i18n="autumn">AUTUMN</h3>
+            <p onclick="filterProducts('autumn', 'top')" data-i18n="tops">- Tops</p>
+            <p onclick="filterProducts('autumn', 'bottom')" data-i18n="bottoms">- Bottoms</p>
+
+            <h3 data-i18n="summer">SUMMER</h3>
+            <p onclick="filterProducts('summer', 'top')" data-i18n="tops">- Tops</p>
+            <p onclick="filterProducts('summer', 'bottom')" data-i18n="bottoms">- Bottoms</p>
+        </div>
+    </div>
+
+    <!-- 🛒 RIGHT CART SIDEBAR -->
+    <div class="overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="sidebar-header">
+            <h2 data-i18n="cargo">CARGO (BAG)</h2>
+            <button class="icon-btn" onclick="toggleCart()"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span data-i18n="total">TOTAL:</span> <span id="cart-total-price">0</span> DA</div>
+            <button class="checkout-btn" onclick="checkout()"><span data-i18n="checkout">TRANSMIT TO WHATSAPP</span> <i class="ph ph-paper-plane-right"></i></button>
+        </div>
+    </div>
+
+    <header id="main-header">
+        <div class="hero-subtitle" data-aos="fade-up">SUPPLY CO. EST. 2026</div>
+        <h1 class="hero-title" data-aos="zoom-in" data-aos-delay="200" data-i18n="hero_title">YOU ARE IN CONTROL</h1>
+        <div class="hero-subtitle" data-aos="fade-up" data-aos-delay="400" data-i18n="explore">EXPLORE COLLECTION -></div>
+    </header>
+
+    <h2 class="section-title" id="section-title" data-aos="fade-in" data-i18n="latest_drops">LATEST DROPS</h2>
+    
+    <div class="grid" id="product-grid"></div>
+
+    <!-- HINT FOR ARCHIVES -->
+    <div class="archives-hint" id="archives-hint">
+        <button class="archive-btn" onclick="toggleNavMenu()" data-i18n="archives_btn">EXPLORE THE ARCHIVES (PAST COLLECTIONS) 🌌</button>
+    </div>
+
+    <br><br><br><br>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
