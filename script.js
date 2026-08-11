@@ -32,7 +32,7 @@ if(cursorDot && cursorOutline) {
     });
 }
 
-// --- 3. MULTILINGUAL DICTIONARY (NO EMOJIS) ---
+// --- 3. MULTILINGUAL DICTIONARY ---
 const translations = {
     en: {
         entering: "ENTERING RYZE...", marquee_text: "WORLDWIDE MINDSET - FREE DELIVERY - SECURE PAYMENT - ",
@@ -144,6 +144,10 @@ function showLatestDrops() {
     document.getElementById('main-header').style.display = 'flex';
     document.getElementById('manifesto-section').style.display = 'flex';
     document.getElementById('archives-hint').style.display = 'block';
+    
+    // Vider la barre de recherche quand on revient à l'accueil
+    document.getElementById('search-bar').value = '';
+    
     let latest = produits.filter(p => p.isLatest);
     renderProducts(latest, "latest_drops");
     closeNavMenu();
@@ -155,17 +159,42 @@ function filterProducts(season, type) {
     document.getElementById('manifesto-section').style.display = 'none';
     document.getElementById('archives-hint').style.display = 'none';
     
+    // Vider la barre de recherche quand on utilise le menu
+    document.getElementById('search-bar').value = '';
+    
     let filtered = produits.filter(p => p.season === season && p.type === type);
     renderProducts(filtered, `${translations[currentLang][season]} - ${translations[currentLang][type+'s']}`);
     closeNavMenu();
 }
 
-showLatestDrops();
+showLatestDrops(); // Affiche la page d'accueil au chargement
 
+// --- RECHERCHE INTELLIGENTE ---
 document.getElementById('search-bar').addEventListener('input', (e) => {
-    let mot = e.target.value.toLowerCase();
+    let mot = e.target.value.toLowerCase().trim();
+    
+    // Si la barre de recherche est vide, on retourne à l'accueil
+    if (mot === '') {
+        showLatestDrops();
+        return;
+    }
+
+    // 1. Cacher les grandes images
+    document.getElementById('main-header').style.display = 'none'; 
+    document.getElementById('manifesto-section').style.display = 'none';
+    document.getElementById('archives-hint').style.display = 'none';
+    
+    // 2. Filtrer les produits
     let filtrés = produits.filter(p => p.name.toLowerCase().includes(mot));
-    renderProducts(filtrés, "SEARCH RESULTS");
+    
+    // 3. Titre dynamique selon la langue
+    let titre = currentLang === 'fr' ? 'RESULTATS' : (currentLang === 'ar' ? 'النتائج' : 'SEARCH RESULTS');
+    
+    // 4. Afficher les résultats
+    renderProducts(filtrés, titre);
+    
+    // 5. Scroller en haut pour voir les résultats
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // --- 6. SIDEBARS & MODALS ---
@@ -266,7 +295,7 @@ function updateCartUI() {
 
 function checkout() {
     if (cart.length === 0) return;
-    let message = "NEW RYZE ORDER%0A%0A";
+    let message = "RYZE ORDER%0A%0A";
     let total = 0;
     cart.forEach(i => { message += `- ${i.qty}x ${i.name} (Size: ${i.size}) : ${i.price * i.qty} DA%0A`; total += i.price * i.qty; });
     message += `%0ATOTAL : ${total} DA%0A%0AInfos:%0AName : %0AWilaya : %0ATel : `;
