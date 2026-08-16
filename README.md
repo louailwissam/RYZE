@@ -29,6 +29,3 @@ Ce projet ne nécessite aucun serveur local complexe.
    ```bash
    git clone https://github.com/louailwissam/RYZE.git
 
-1. Clonez le répertoire :
-   ```bash
-   git clone https://github.com/louailwissam/RYZE.git
