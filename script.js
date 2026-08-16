@@ -35,21 +35,21 @@ if(cursorDot && cursorOutline) {
 // --- 3. MULTILINGUAL DICTIONARY ---
 const translations = {
     en: {
-        entering: "ENTERING RYZE...", marquee_text: "WORLDWIDE MINDSET - FREE DELIVERY - SECURE PAYMENT - ",
+        entering: "ENTERING RYZE...", 
         hero_title: "YOU ARE IN CONTROL", explore: "EXPLORE COLLECTION ->", manifesto_title: "REDEFINE GRAVITY", manifesto_text: "Streetwear designed for the unknown.",
         collections: "COLLECTIONS", winter: "WINTER", autumn: "AUTUMN", summer: "SUMMER", tops: "- Tops", bottoms: "- Bottoms",
         cargo: "CARGO (BAG)", total: "TOTAL:", checkout: "TRANSMIT TO WHATSAPP", empty_cart: "Your cargo is empty.",
         latest_drops: "LATEST DROPS", archives_btn: "EXPLORE THE ARCHIVES (PAST COLLECTIONS)", add_bag: "ADD TO BAG", sold_out: "SOLD OUT", size_guide: "Size Guide", size_guide_title: "SIZE GUIDE"
     },
     fr: {
-        entering: "CONNEXION A RYZE...", marquee_text: "ETAT D'ESPRIT MONDIAL - LIVRAISON 58 WILAYAS - PAIEMENT A LA LIVRAISON - ",
+        entering: "CONNEXION A RYZE...", 
         hero_title: "VOUS ETES AUX COMMANDES", explore: "EXPLORER LA COLLECTION ->", manifesto_title: "REDEFINIR LA GRAVITE", manifesto_text: "Le Streetwear concu pour l'inconnu.",
         collections: "COLLECTIONS", winter: "HIVER", autumn: "AUTOMNE", summer: "ETE", tops: "- Hauts", bottoms: "- Bas",
         cargo: "CARGO (PANIER)", total: "TOTAL:", checkout: "COMMANDER VIA WHATSAPP", empty_cart: "Votre cargo est vide.",
         latest_drops: "DERNIERES SORTIES", archives_btn: "EXPLORER LES ARCHIVES (ANCIENNES COLLECTIONS)", add_bag: "AJOUTER", sold_out: "EPUISE", size_guide: "Guide des Tailles", size_guide_title: "GUIDE DES TAILLES"
     },
     ar: {
-        entering: "دخول عالم رايز...", marquee_text: "تفكير عالمي - توصيل 58 ولاية - الدفع عند الاستلام - ",
+        entering: "دخول عالم رايز...", 
         hero_title: "أنت في موقع السيطرة", explore: "استكشف التشكيلة <-", manifesto_title: "إعادة تعريف الجاذبية", manifesto_text: "ملابس شارع مصممة للمجهول.",
         collections: "التشكيلات", winter: "شتاء", autumn: "خريف", summer: "صيف", tops: "- ملابس علوية", bottoms: "- ملابس سفلية",
         cargo: "الحقيبة", total: "المجموع:", checkout: "أرسل الطلب عبر واتساب", empty_cart: "حقيبتك فارغة.",
@@ -74,30 +74,51 @@ function changeLanguage(lang) {
     updateCartUI();
 }
 
-// --- 4. DATABASE ---
-const produits = [
-    {
-        id: 1, name: "ORBIT TEE", price: 3500, season: "summer", type: "top", stock: 15, isLatest: true,
-        imgFront: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600", imgBack: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600"
-    },
-    {
-        id: 2, name: "VOID HOODIE", price: 6500, season: "winter", type: "top", stock: 0, isLatest: true, 
-        imgFront: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600", imgBack: "https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600"
-    },
-    {
-        id: 3, name: "NEBULA JACKET", price: 9500, season: "autumn", type: "top", stock: 5, isLatest: false,
-        imgFront: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600", imgBack: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600"
-    },
-    {
-        id: 4, name: "CARGO PANTS", price: 5500, season: "autumn", type: "bottom", stock: 10, isLatest: true,
-        imgFront: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600", imgBack: "https://images.unsplash.com/photo-1517423568366-8b83523034fd?w=600"
-    }
-];
-
-// --- 5. RENDER & FILTER ---
+// --- 4. DATABASE (CONNECTÉ À GOOGLE SHEETS) ---
+let produits = []; 
 const grid = document.getElementById('product-grid');
 let currentFilter = null;
 
+// ⚠️ METS LE LIEN DE TON FICHIER GOOGLE SHEETS PUBLIÉ (.csv) ICI :
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS1hvpFae2WqnRVuBCJoSjPDHkLQ0GQJeZHi7aTRcyQCF6uQZBksBSOCIlXHiSb3-DKrfD3jHqDNVrd/pub?output=csv";
+
+function loadProductsFromGoogleSheets() {
+    if (typeof Papa === 'undefined') {
+        console.error("ERREUR: PapaParse n'est pas chargé. Ajoute le script dans le head de ton HTML.");
+        grid.innerHTML = "<p style='text-align:center; color: red;'>Critical System Failure (PapaParse missing).</p>";
+        return;
+    }
+
+    Papa.parse(sheetURL, {
+        download: true,
+        header: true,
+        dynamicTyping: true, // Transforme le texte en nombres automatiquement
+        complete: function(results) {
+            // Nettoyer les lignes vides éventuelles
+            produits = results.data.filter(p => p.name);
+            
+            // S'assurer que isLatest est bien compris comme un booléen
+            produits.forEach(p => {
+                p.isLatest = (p.isLatest === true || p.isLatest === "true" || p.isLatest === "TRUE" || p.isLatest === 1);
+            });
+
+            console.log("Transmission Reçue : Produits chargés", produits);
+            
+            // On affiche la page d'accueil une fois le chargement terminé
+            showLatestDrops();
+        },
+        error: function(error) {
+            console.error("Erreur Google Sheets:", error);
+            grid.innerHTML = "<p style='text-align:center; color: red;'>Erreur de connexion au serveur Ryze.</p>";
+        }
+    });
+}
+
+// On lance le téléchargement des vêtements au démarrage
+loadProductsFromGoogleSheets();
+
+
+// --- 5. RENDER & FILTER ---
 function renderProducts(liste, titleKey) {
     grid.innerHTML = "";
     document.getElementById('section-title').innerText = translations[currentLang][titleKey] || titleKey;
@@ -108,7 +129,7 @@ function renderProducts(liste, titleKey) {
     }
 
     liste.forEach((produit, index) => {
-        let isSoldOut = produit.stock === 0;
+        let isSoldOut = produit.stock <= 0;
         let btnText = isSoldOut ? translations[currentLang].sold_out : translations[currentLang].add_bag;
         let btnClass = isSoldOut ? "add-btn disabled" : "add-btn";
         let overlay = isSoldOut ? `<div class="sold-out-overlay"><div class="sold-out-text">${translations[currentLang].sold_out}</div></div>` : "";
@@ -145,7 +166,6 @@ function showLatestDrops() {
     document.getElementById('manifesto-section').style.display = 'flex';
     document.getElementById('archives-hint').style.display = 'block';
     
-    // Vider la barre de recherche quand on revient à l'accueil
     document.getElementById('search-bar').value = '';
     
     let latest = produits.filter(p => p.isLatest);
@@ -159,7 +179,6 @@ function filterProducts(season, type) {
     document.getElementById('manifesto-section').style.display = 'none';
     document.getElementById('archives-hint').style.display = 'none';
     
-    // Vider la barre de recherche quand on utilise le menu
     document.getElementById('search-bar').value = '';
     
     let filtered = produits.filter(p => p.season === season && p.type === type);
@@ -167,33 +186,23 @@ function filterProducts(season, type) {
     closeNavMenu();
 }
 
-showLatestDrops(); // Affiche la page d'accueil au chargement
-
 // --- RECHERCHE INTELLIGENTE ---
 document.getElementById('search-bar').addEventListener('input', (e) => {
     let mot = e.target.value.toLowerCase().trim();
     
-    // Si la barre de recherche est vide, on retourne à l'accueil
     if (mot === '') {
         showLatestDrops();
         return;
     }
 
-    // 1. Cacher les grandes images
     document.getElementById('main-header').style.display = 'none'; 
     document.getElementById('manifesto-section').style.display = 'none';
     document.getElementById('archives-hint').style.display = 'none';
     
-    // 2. Filtrer les produits
     let filtrés = produits.filter(p => p.name.toLowerCase().includes(mot));
     
-    // 3. Titre dynamique selon la langue
     let titre = currentLang === 'fr' ? 'RESULTATS' : (currentLang === 'ar' ? 'النتائج' : 'SEARCH RESULTS');
-    
-    // 4. Afficher les résultats
     renderProducts(filtrés, titre);
-    
-    // 5. Scroller en haut pour voir les résultats
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
@@ -299,5 +308,7 @@ function checkout() {
     let total = 0;
     cart.forEach(i => { message += `- ${i.qty}x ${i.name} (Size: ${i.size}) : ${i.price * i.qty} DA%0A`; total += i.price * i.qty; });
     message += `%0ATOTAL : ${total} DA%0A%0AInfos:%0AName : %0AWilaya : %0ATel : `;
+    
+    // ⚠️ N'OUBLIE PAS DE METTRE TON VRAI NUMÉRO ICI !
     window.open(`https://wa.me/213000000000?text=${message}`, '_blank');
 }
