@@ -51,14 +51,14 @@ nav { display: flex; justify-content: space-between; align-items: center; paddin
 .overlay { position: fixed; top: 0px; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; }
 .overlay.active { opacity: 1; pointer-events: all; }
 
-.nav-sidebar { position: fixed; top: 30px; left: -400px; width: 350px; max-width: 100%; height: calc(100vh - 30px); background: #0a0a0a; z-index: 1001; transition: 0.4s ease-in-out; border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
+.nav-sidebar { position: fixed; top: 30px; left: -400px; width: 350px; max-width: 100%; height: calc(100vh - 30px); background: #0a0a0a; z-index: 1001; transition: 0.2s ease-in-out; border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
 .nav-sidebar.active { left: 0; }
 .menu-items { padding: 2rem; }
 .menu-items h3 { margin-top: 1.5rem; margin-bottom: 0.5rem; color: white; letter-spacing: 2px; }
 .menu-items p { color: var(--text-muted); cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
 .menu-items p:hover { color: white; padding-left: 10px; }
 
-.cart-sidebar { position: fixed; top: 30px; right: -400px; width: 350px; max-width: 100%; height: calc(100vh - 30px); background: #0a0a0a; z-index: 1001; transition: 0.4s ease-in-out; border-left: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
+.cart-sidebar { position: fixed; top: 30px; right: -400px; width: 350px; max-width: 100%; height: calc(100vh - 30px); background: #0a0a0a; z-index: 1001; transition: 0.2s ease-in-out; border-left: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
 .cart-sidebar.active { right: 0; }
 .sidebar-header { padding: 1.5rem; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); }
 .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; }
@@ -93,7 +93,7 @@ header { height: 100vh; display: flex; flex-direction: column; justify-content: 
 /* PRODUCTS */
 .section-title { text-align: center; font-size: 2rem; margin: 5rem 0 3rem; letter-spacing: 3px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 5%; max-width: 1200px; margin: 0 auto; }
-.card { background: transparent; border: 1px solid rgba(255,255,255,0.1); padding: 1rem; transition: 0.4s; position: relative; }
+.card { background: transparent; border: 1px solid rgba(255,255,255,0.1); padding: 1rem; transition: 0.2s; position: relative; }
 .card:hover { border-color: rgba(255,255,255,0.5); transform: translateY(-10px); }
 
 /* SOLD OUT */

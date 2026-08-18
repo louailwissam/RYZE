@@ -74,12 +74,11 @@ function changeLanguage(lang) {
     updateCartUI();
 }
 
-// --- 4. DATABASE (CONNECTÉ À GOOGLE SHEETS) ---
+// connecter l google sheet la3ziz
 let produits = []; 
 const grid = document.getElementById('product-grid');
 let currentFilter = null;
 
-// ⚠️ METS LE LIEN DE TON FICHIER GOOGLE SHEETS PUBLIÉ (.csv) ICI :
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS1hvpFae2WqnRVuBCJoSjPDHkLQ0GQJeZHi7aTRcyQCF6uQZBksBSOCIlXHiSb3-DKrfD3jHqDNVrd/pub?output=csv";
 
 function loadProductsFromGoogleSheets() {
